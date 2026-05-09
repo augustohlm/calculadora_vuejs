@@ -1,47 +1,118 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { reactive } from 'vue';
+
+
+    const valores = reactive({
+      numero1: 0,
+      numero2: 0,
+      operador: "+",
+      resultado: 0,
+    })
+
+    function calculaOperacao() {
+        const num1 = parseFloat(valores.numero1)
+        const num2 = parseFloat(valores.numero2)
+
+        switch(valores.operador){
+          case '+':
+            valores.resultado = num1+num2;
+            break;
+          
+          case '-':
+            valores.resultado = num1-num2;
+            break;
+
+          case '*':
+            valores.resultado = num1*num2;
+            break;
+
+          case '/':
+              if(num2 === 0){
+              valores.resultado = "Informe um número diferente de 0";
+            } else {
+              valores.resultado = num1/num2;
+            }
+            break;
+
+          default:
+            valores.resultado;
+        }
+
+    }
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <header>
+                    <h1 >Calculadora aritmética</h1>
+                </header>
+            </div>
+            <form>
+              <input @keyup="evento => {valores.numero1 = evento.target.value; calculaOperacao()}" type="number" placeholder="Insira um número">
+              <select @change="evento => {valores.operador = evento.target.value; calculaOperacao()}">
+                <option value="+">+</option>
+                <option value="-">-</option>
+                <option value="*">*</option>
+                <option value="/">/</option>
+              </select>
+              <input @keyup="evento => {valores.numero2 = evento.target.value; calculaOperacao()}" type="number" placeholder="Insira um número">
+              <h1 class="zero-p">=</h1>
+              <div class="resultado">
+                {{ valores.resultado }}
+              </div>
+            </form>
+        </div>
     </div>
-  </header>
 
-  <main>
-    <TheWelcome />
-  </main>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+  .container {
+    margin: 200px auto;
+    max-width: 900px;
+    border-radius: 30px;
+    background-color: #09020f;
+    border: 3px solid  #7f7782;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 1);
+    color: #fcfcfc;
   }
 
-  .logo {
-    margin: 0 2rem 0 0;
+  header{
+  display: flex;
+  padding: 50px;
+  
+}
+
+.zero-p {
+  margin: 0;
+  padding-bottom: 7px;
+}
+
+  h1{
+    margin: 0 auto;
+    color: #fcfcfc;
   }
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+  form{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+  background-color: #09020f;
+  border-bottom-right-radius:30px ;
+  border-bottom-left-radius:30px ;
 }
+
+select {
+  margin: 0 4px;
+}
+
+.resultado {
+  font-size: 20px;
+  margin-left: 3px;
+}
+
 </style>
